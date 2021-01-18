@@ -2,22 +2,23 @@ import './App.css';
 import Login from './components/Login';
 
 import { firebase } from './config/firebase';
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 
 function App() {
     const [user, setUser] = useState(null);
     var provider = new firebase.auth.GoogleAuthProvider();
-
-    firebase.auth().onAuthStateChanged((User) => {
-        if (User) {
-            // User is signed in.
-            console.log('signing in')
-            setUser(User.displayName)
-        } else {
-            // No user is signed in.
-            console.log('sign in failed')
-        }
-    });
+    useEffect(()=>{
+        firebase.auth().onAuthStateChanged((User) => {
+            if (User) {
+                // User is signed in.
+                console.log('signing in')
+                setUser(User.displayName)
+            } else {
+                // No user is signed in.
+                console.log('sign in failed')
+            }
+        });
+    },[user])
 
     return (
         <div className="App" >
