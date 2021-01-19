@@ -1,43 +1,64 @@
 import './App.css';
-import Login from './components/Login';
+import { firebaseConfig, uiConfig } from './config/firebase';
+import React, { useState } from 'react'
+import firebase from "firebase/app";
 
-import { firebase } from './config/firebase';
-import React, { useState , useEffect} from 'react';
+// Add the Firebase services that you want to use
+import "firebase/auth";
+import "firebase/firestore";
+
+var firebaseApp = firebase.initializeApp(firebaseConfig);
+var provider = new firebase.auth.GoogleAuthProvider();
+
 
 function App() {
     const [user, setUser] = useState(null);
-    var provider = new firebase.auth.GoogleAuthProvider();
-    useEffect(()=>{
-        firebase.auth().onAuthStateChanged((User) => {
-            if (User) {
-                // User is signed in.
-                console.log('signing in')
-                setUser(User.displayName)
-            } else {
-                // No user is signed in.
-                console.log('sign in failed')
-            }
+
+    const login = () => {
+        firebase.auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+            // ...
+        }).catch((error) => {
+            console.log(error)
         });
-    },[user])
+    }
+    const logout = () => {
+        firebaseApp.auth().signOut().then(() => {
+            console.log('loggin out');
+            setUser(null)
+
+        })
+    }
+
+    firebaseApp.auth().onAuthStateChanged(response => {
+        if (response) {
+            setUser(response);
+            console.log(response)
+        } else {
+            (console.log('no response'))
+        }
+
+    })
+
 
     return (
         <div className="App" >
-            <h1>test functions</h1>
-            <button onClick={() => {
-                user ?
-                    console.log(user)
-                    :
-                    console.log('no user found')
-            }}>who this?
-            </button>
-            <button onClick={() => {
-                firebase.auth().signInWithRedirect(provider);
-                const User = firebase.auth().currentUser;
-                setUser(User);
-                console.log(User);
-            }}>whhooooo</button>
-            <Login />
 
+            {user ?
+                <button onClick={() => {
+                    logout()
+                }}>Logout</button>
+                :
+                <button onClick={() => {
+                    login()
+                }}>Login</button>
+            }
+            {user ?
+                <button onClick={() => console.log(user.displayName)}>who this?</button>
+                :
+                <h3>no user</h3>
+            }
         </div>
 
     );
