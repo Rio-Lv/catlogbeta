@@ -40,5 +40,9 @@ const uiConfig = {
         }
     }
 }
+var firebaseApp = firebase.initializeApp(firebaseConfig);
+const db = firebaseApp.firestore();
+const storage = firebaseApp.storage();
+const timeStamp = firebase.firestore.FieldValue.serverTimestamp();
 
-export { firebaseConfig, uiConfig};
+export { firebaseApp,db,storage,timeStamp};

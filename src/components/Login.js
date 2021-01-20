@@ -2,7 +2,6 @@ import React from 'react'
 
 function Login() {
 
-    
 
     //ui.start('#firebaseui-auth-container', uiconfig);
 
