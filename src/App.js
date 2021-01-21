@@ -43,24 +43,28 @@ function App() {
             setUser(response);
             //console.log(response)
         } else {
-            (console.log('no response'))
+            (console.log('auth function no response'))
         }
     })
 
-    useEffect(() => {
-        if(user){
+    const getCollection = () => {
+        if (user) {
             console.log('getting collection');
             db.collection("posts").where("userID", "==", `${user.uid}`)
                 .onSnapshot(function (querySnapshot) {
-                    var posts = [];
+                    var Posts = [];
                     querySnapshot.forEach(function (doc) {
-                        posts.push(doc.data().imageUrl);
+                        Posts.push(doc.data().imageUrl);
                     });
-                    console.log("Current posts: ", posts.join(", "));
+                    console.log("Current posts: ", Posts.join(", "));
+                    setPosts(Posts);
+                    console.log("posts are set");
+                    
                 });
-                console.log('collection received');
+            console.log('collection received');
         }
-    })
+    }
+
 
 
     return (
@@ -96,10 +100,16 @@ function App() {
             }
             {user ?
                 console.log("posts " + posts.id)
+
                 :
                 <h3>login to post</h3>
             }
-
+            {user ?
+                <Button onClick={() => {
+                    console.log(posts)
+                }}>Collection Test</Button>
+                :
+                <h3>  </h3>}
 
         </div>
 
