@@ -54,12 +54,19 @@ function App() {
                 .onSnapshot(function (querySnapshot) {
                     var Posts = [];
                     querySnapshot.forEach(function (doc) {
-                        Posts.push(doc.data().imageUrl);
+                        Posts.push(
+
+                            {
+                                imageUrl: doc.data().imageUrl,
+                                userID: doc.data().userID
+                            }
+                            
+                        );
                     });
                     console.log("Current posts: ", Posts.join(", "));
                     setPosts(Posts);
                     console.log("posts are set");
-                    
+
                 });
             console.log('collection received');
         }
@@ -106,15 +113,27 @@ function App() {
             }
             {user ?
                 <Button onClick={() => {
+                    getCollection();
                     console.log(posts)
                 }}>Collection Test</Button>
                 :
                 <h3>  </h3>}
-
+            {posts ?
+                
+                posts.map(({id,imageUrl}) =>(
+                    <Post key={id} imageUrl = {`${imageUrl}`}/>
+                ))
+                :
+                <h3>no posts loaded</h3>
+            }
+            {posts[0]?               
+                console.log("Post => UserID :   " + `${posts[0].imageUrl}`)
+                :
+                <h3>no posts loaded</h3>
+            }
         </div>
 
     );
 }
 
 export default App;
-

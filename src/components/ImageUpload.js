@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 function ImageUpload({username, userID }) {
     const [image, setImage] = useState(null);
-    const [url, setUrl] = useState("");
     const [progress, setProgress] = useState(0);
     const [caption, setCaption] = useState('');
 
@@ -49,19 +48,20 @@ function ImageUpload({username, userID }) {
                     .child(id)
                     .getDownloadURL()
                     .then(url => {
-                        // post image inside db
+                        // post image inside db     
                         db.collection("posts").add({
                             timestamp: timeStamp,
                             caption: caption,
                             imageUrl: url,
                             userID: userID,
-                            username: username
+                            username: username,
 
                         });
                         console.log('image has been sent')
                         setProgress(0);
                         setCaption("");
                         setImage(null);
+                        
                     })
             }
 
@@ -80,14 +80,12 @@ function ImageUpload({username, userID }) {
 
             <input type="text" placeholder='Enter a caption' onChange={event => setCaption(event.target.value)} value={caption} />
 
-
-
             <input type="file" onChange={handleChange} />
             <Button onClick={handleUpload}>
                 Upload
             </Button>
             <Button onClick={testFunc}>
-                test
+                test_image_name
             </Button>
 
 
