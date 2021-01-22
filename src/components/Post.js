@@ -1,11 +1,12 @@
 //import React from 'react';
 import './Post.css';
 
-function Post({username,caption,imageUrl}) {
+function Post({username,caption,imageUrl,id}) {
     return (
         <div className="post">
             <div className="post__header">
-                <h3>{username}</h3>
+                <h3>hello</h3>
+                
             </div> 
 
             {/* header -> avatar + username */}
@@ -16,6 +17,7 @@ function Post({username,caption,imageUrl}) {
 
             <h4 className="post__text"><strong>{username}</strong> {caption}
             </h4>
+            
             
             {/* username + caption */}
         </div>

@@ -57,11 +57,12 @@ function App() {
                         Posts.push(
 
                             {
+                                id: doc.id,
                                 imageUrl: doc.data().imageUrl,
                                 userID: doc.data().userID,
                                 points: doc.data().points
                             }
-                            
+
                         );
                     });
                     console.log("Current posts: ", Posts.join(", "));
@@ -119,23 +120,31 @@ function App() {
                 }}>Collection Test</Button>
                 :
                 <h3>  </h3>}
-            <button onClick={()=>{console.log(posts)}}>Points</button>
+            <button onClick={() => {
+                console.log(posts[0].points)
+            }}>Points</button>
             {posts ?
-                
-                posts.map(({id,imageUrl}) =>(
-                    <Post key={id} imageUrl = {`${imageUrl}`}/>
+
+                posts.map(({ id, imageUrl }) => (
+                    <div>
+                        <button onClick={() => {
+                            console.log(id)
+                        }}>plooooooop</button>
+                        <Post key={id} imageUrl={`${imageUrl}`} id={id} />
+                    </div>
+
                 ))
                 :
                 <h3>no posts loaded</h3>
             }
-            {posts[0]?               
+            {posts[0] ?
                 (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[1].points}`)
-                
+
                 )
                 :
                 <h3>no posts loaded</h3>
             }
-            
+
         </div>
 
     );
