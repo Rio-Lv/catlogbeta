@@ -58,7 +58,8 @@ function App() {
 
                             {
                                 imageUrl: doc.data().imageUrl,
-                                userID: doc.data().userID
+                                userID: doc.data().userID,
+                                points: doc.data().points
                             }
                             
                         );
@@ -118,6 +119,7 @@ function App() {
                 }}>Collection Test</Button>
                 :
                 <h3>  </h3>}
+            <button onClick={()=>{console.log(posts)}}>Points</button>
             {posts ?
                 
                 posts.map(({id,imageUrl}) =>(
@@ -127,10 +129,13 @@ function App() {
                 <h3>no posts loaded</h3>
             }
             {posts[0]?               
-                console.log("Post => UserID :   " + `${posts[0].imageUrl}`)
+                (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[1].points}`)
+                
+                )
                 :
                 <h3>no posts loaded</h3>
             }
+            
         </div>
 
     );

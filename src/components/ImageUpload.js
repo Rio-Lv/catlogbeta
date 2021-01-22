@@ -55,6 +55,7 @@ function ImageUpload({username, userID }) {
                             imageUrl: url,
                             userID: userID,
                             username: username,
+                            points:0
 
                         });
                         console.log('image has been sent')
