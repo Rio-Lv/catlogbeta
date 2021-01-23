@@ -55,7 +55,6 @@ function App() {
                     var Posts = [];
                     querySnapshot.forEach(function (doc) {
                         Posts.push(
-
                             {
                                 id: doc.id,
                                 imageUrl: doc.data().imageUrl,
@@ -123,20 +122,25 @@ function App() {
             <button onClick={() => {
                 console.log(posts[0].points)
             }}>Points</button>
+
+
+            {/* {here the tabe begins =====================================================================================================} */}
             {posts ?
 
-                posts.map(({ id, imageUrl }) => (
+                posts.map(({ id, imageUrl, points }) => (
                     <div>
                         <button onClick={() => {
-                            console.log(id)
+                            var doc = db.collection("posts").doc(id).update({points:points+1});
+                            console.log(doc);
                         }}>plooooooop</button>
-                        <Post key={id} imageUrl={`${imageUrl}`} id={id} />
+                        <Post key={id} imageUrl={`${imageUrl}`}  points={points}  id={id}/>
                     </div>
 
                 ))
                 :
                 <h3>no posts loaded</h3>
             }
+            {/* {here the tabe ends =====================================================================================================} */}
             {posts[0] ?
                 (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[1].points}`)
 

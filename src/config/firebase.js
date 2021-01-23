@@ -44,5 +44,6 @@ var firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebaseApp.firestore();
 const storage = firebaseApp.storage();
 const timeStamp = firebase.firestore.FieldValue.serverTimestamp();
+const increment = firebase.firestore.FieldValue.increment(1);
 
-export { firebaseApp,db,storage,timeStamp};
+export { firebaseApp,db,storage,timeStamp,increment};
