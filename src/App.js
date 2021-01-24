@@ -64,9 +64,12 @@ function App() {
 
                         );
                     });
-                    console.log("Current posts: ", Posts.join(", "));
-                    setPosts(Posts);
-                    console.log("posts are set");
+                    if (Posts[0] != null) {
+                        setPosts(Posts);
+                        console.log("posts are set");
+                    }
+
+
 
                 });
             console.log('collection received');
@@ -101,7 +104,6 @@ function App() {
                 <ImageUpload
                     username={user.displayName}
                     userID={user.uid}
-
                 />
                 :
                 <h3>Login for imageupload</h3>
@@ -119,9 +121,6 @@ function App() {
                 }}>Collection Test</Button>
                 :
                 <h3>  </h3>}
-            <button onClick={() => {
-                console.log(posts[0].points)
-            }}>Points</button>
 
 
             {/* {here the tabe begins =====================================================================================================} */}
@@ -129,20 +128,15 @@ function App() {
 
                 posts.map(({ id, imageUrl, points }) => (
                     <div>
-                        <button onClick={() => {
-                            var doc = db.collection("posts").doc(id).update({points:points+1});
-                            console.log(doc);
-                        }}>plooooooop</button>
-                        <Post key={id} imageUrl={`${imageUrl}`}  points={points}  id={id}/>
+                        <Post key={id} imageUrl={`${imageUrl}`} points={points} id={id} />
                     </div>
-
                 ))
                 :
                 <h3>no posts loaded</h3>
             }
             {/* {here the tabe ends =====================================================================================================} */}
             {posts[0] ?
-                (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[1].points}`)
+                (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[0].points}`)
 
                 )
                 :

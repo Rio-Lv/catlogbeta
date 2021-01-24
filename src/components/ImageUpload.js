@@ -44,8 +44,7 @@ function ImageUpload({username, userID }) {
             () => {
                 // complete function...
                 storage
-                    .ref("images")
-                    .child(id)
+                    .ref(`images/${id}`)
                     .getDownloadURL()
                     .then(url => {
                         // post image inside db     

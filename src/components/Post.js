@@ -22,8 +22,9 @@ function Post({ username, caption, imageUrl, id }) {
                 }}>addpoint</button>  
                 <button onClick={() => {
                     db.collection("posts").doc(id).get().then(doc=>{
-                        console.log(doc.data().points);
-                        setScore(doc.data().points)
+                        doc.data().points?
+                        setScore(doc.data().points):setScore(0);
+                        console.log(score)
                     })    
                 }}>count</button>   
                 
