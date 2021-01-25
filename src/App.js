@@ -11,14 +11,15 @@ import "firebase/firestore";
 import ImageUpload from './components/ImageUpload'
 import Post from './components/Post'
 
-import countDown from './config/time'
+import countDown from './functions/time'
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
 function App() {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [counter,setCounter] = useState(Date.now() + 1000*60*60*5)
+    const [counter,setCounter] = useState(Date.now() + 1000*60*60*5);
+    const [time, setTime] = useState({day:0,hour:0,minute:0,seconds:0})
     const login = () => {
         firebase.auth()
             .signInWithPopup(provider)
@@ -72,12 +73,15 @@ function App() {
             console.log('collection received');
         }
     }
-  
-   
-
     useEffect(() => {
         const interval = setInterval(() => {
-          console.log(countDown(counter));
+
+          setTime({
+              day:countDown(counter).day,
+              hour:countDown(counter).hour,
+              minute:countDown(counter).minute,
+              seconds:countDown(counter).seconds
+            })
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -112,8 +116,8 @@ function App() {
                 <h3>Login for imageupload</h3>
             }
             {user ?
-                console.log("posts " + posts.id)
-
+                //console.log("posts " + posts.id)
+                <h2> </h2>
                 :
                 <h3>login to post</h3>
             }
@@ -124,14 +128,9 @@ function App() {
                 }}>Collection Test</Button>
                 :
                 <h3>  </h3>}
-            <button onClick={() => {
-                
-            }}>count Down</button>
-            <h1>{counter}</h1>
+            <h1>Time remaining:  Days,{time.day}, Hours:{time.hour} minutes:{time.minute} seconds:{time.seconds}</h1>
 
-       
-
-            {/* {here the tabe begins =====================================================================================================} */}
+            {/* {here the table begins =====================================================================================================} */}
             {posts ?
 
                 posts.map(({ id, imageUrl, points }) => (
