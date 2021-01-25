@@ -11,7 +11,7 @@ import "firebase/firestore";
 import ImageUpload from './components/ImageUpload'
 import Post from './components/Post'
 
-import setTimes from './config/time'
+import countDown from './config/time'
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -71,6 +71,7 @@ function App() {
             console.log('collection received');
         }
     }
+    const endDate = Date.now() + 1000*60*60*5;
 
     return (
         <div className="App" >
@@ -115,8 +116,8 @@ function App() {
                 :
                 <h3>  </h3>}
             <button onClick={() => {
-                setTimes()
-            }}>set timestamps</button>
+                countDown(endDate)
+            }}>count Down</button>
 
        
 
