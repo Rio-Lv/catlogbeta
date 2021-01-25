@@ -18,6 +18,7 @@ var provider = new firebase.auth.GoogleAuthProvider();
 function App() {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [counter,setCounter] = useState(Date.now() + 1000*60*60*5)
     const login = () => {
         firebase.auth()
             .signInWithPopup(provider)
@@ -71,7 +72,15 @@ function App() {
             console.log('collection received');
         }
     }
-    const endDate = Date.now() + 1000*60*60*5;
+  
+   
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          console.log(countDown(counter));
+        }, 1000);
+        return () => clearInterval(interval);
+      }, []);
 
     return (
         <div className="App" >
@@ -116,8 +125,9 @@ function App() {
                 :
                 <h3>  </h3>}
             <button onClick={() => {
-                countDown(endDate)
+                
             }}>count Down</button>
+            <h1>{counter}</h1>
 
        
 
