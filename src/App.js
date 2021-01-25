@@ -11,15 +11,13 @@ import "firebase/firestore";
 import ImageUpload from './components/ImageUpload'
 import Post from './components/Post'
 
+import setTimes from './config/time'
 
 var provider = new firebase.auth.GoogleAuthProvider();
-
-
 
 function App() {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-
     const login = () => {
         firebase.auth()
             .signInWithPopup(provider)
@@ -37,7 +35,6 @@ function App() {
 
         })
     }
-
     firebaseApp.auth().onAuthStateChanged(response => {
         if (response) {
             setUser(response);
@@ -46,7 +43,6 @@ function App() {
             (console.log('auth function no response'))
         }
     })
-
     const getCollection = () => {
         if (user) {
             console.log('getting collection');
@@ -76,11 +72,8 @@ function App() {
         }
     }
 
-
-
     return (
         <div className="App" >
-
             {user ?
                 <Button onClick={() => {
                     logout()
@@ -121,7 +114,11 @@ function App() {
                 }}>Collection Test</Button>
                 :
                 <h3>  </h3>}
+            <button onClick={() => {
+                setTimes()
+            }}>set timestamps</button>
 
+       
 
             {/* {here the tabe begins =====================================================================================================} */}
             {posts ?
@@ -135,13 +132,14 @@ function App() {
                 <h3>no posts loaded</h3>
             }
             {/* {here the tabe ends =====================================================================================================} */}
-            {posts[0] ?
+            {/* {posts[0] ?
                 (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[0].points}`)
 
                 )
                 :
-                <h3>no posts loaded</h3>
-            }
+                <h3>no posts loaded</h3> 
+            } */}
+
 
         </div>
 

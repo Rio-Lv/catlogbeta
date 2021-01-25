@@ -1,0 +1,34 @@
+completed tasks==>
+-google login
+-imageupload system
+-imageloading data structure
+-user structure
+
+
+
+tasks remaining ==>
+-image formatter: all images should be square
+
+{   
+    create entries collection: (store image url and id for each week)
+    entry randomizer: can take the lowest voted ones, each instance can be called a match
+    Create a voting component:
+
+    two image voting: takes two entry id's and displays them
+}
+-use firebase limit to filter the the top 1000, then top 10, then top 1
+top 10 is stored into the public gallery
+
+
+{-create a public gallery viewing for the winners}
+-create a prerun with winning images displaying
+
+{-change points to a win loss} 
+
+-
+-create weekly auto reset
+{
+    create a firebase project that has a count down
+}
+
+-fix ui login

@@ -1,12 +1,11 @@
 import React ,{useState} from 'react';
-import './Post.css';
+import './styles/Post.css';
 import { increment, db } from '../config/firebase';
 
 function Post({ username, caption, imageUrl, id }) {
     const [score,setScore] = useState(0);
     db.collection("posts").onSnapshot(()=>{
         db.collection("posts").doc(id).get().then(doc=>{
-            console.log(doc.data().points);
             setScore(doc.data().points)
         })  
     })
@@ -19,15 +18,7 @@ function Post({ username, caption, imageUrl, id }) {
                 <button onClick={() => {
                     db.collection("posts").doc(id).update({ points: increment});
                     
-                }}>addpoint</button>  
-                <button onClick={() => {
-                    db.collection("posts").doc(id).get().then(doc=>{
-                        doc.data().points?
-                        setScore(doc.data().points):setScore(0);
-                        console.log(score)
-                    })    
-                }}>count</button>   
-                
+                }}>addpoint</button>               
                 <h1>{score}</h1>
 
             </div>
