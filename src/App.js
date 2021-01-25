@@ -1,6 +1,6 @@
 import './App.css';
 import { firebaseApp, db } from './config/firebase';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import firebase from "firebase/app";
 import { Button } from '@material-ui/core';
 
@@ -8,18 +8,19 @@ import { Button } from '@material-ui/core';
 import "firebase/auth";
 import "firebase/firestore";
 
-import ImageUpload from './components/ImageUpload'
-import Post from './components/Post'
+import ImageUpload from './components/ImageUpload';
+import Post from './components/Post';
 
-import countDown from './functions/time'
+import countDown from './functions/time';
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
 function App() {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [counter,setCounter] = useState(Date.now() + 1000*60*60*5);
-    const [time, setTime] = useState({day:0,hour:0,minute:0,seconds:0})
+    const counter = 0;
+    const [time, setTime] = useState({ day: 0, hour: 0, minute: 0, seconds: 0 })
+    const [deadline, setDeadline] = useState(0);
     const login = () => {
         firebase.auth()
             .signInWithPopup(provider)
@@ -59,7 +60,6 @@ function App() {
                                 userID: doc.data().userID,
                                 points: doc.data().points
                             }
-
                         );
                     });
                     if (Posts[0] != null) {
@@ -73,18 +73,43 @@ function App() {
             console.log('collection received');
         }
     }
+
+
+    useEffect(() => {
+        const week = 1000*60*60*24*7;
+        db.collection("Challenge").where("deadline", "!=", 0)
+            .get()
+            .then(function (querySnapshot) {
+                
+                querySnapshot.forEach(function (doc) {    
+                    // doc.data() is never undefined for query doc snapshots
+                    
+                    if(doc.data().deadline>Date.now() && doc.data().deadline<Date.now()+week){
+                        console.log('eyy')
+                        setDeadline(doc.data().deadline)
+                    }
+
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+
+    }, [])
+
+
     useEffect(() => {
         const interval = setInterval(() => {
 
-          setTime({
-              day:countDown(counter).day,
-              hour:countDown(counter).hour,
-              minute:countDown(counter).minute,
-              seconds:countDown(counter).seconds
+            setTime({
+                day: countDown(counter).day,
+                hour: countDown(counter).hour,
+                minute: countDown(counter).minute,
+                seconds: countDown(counter).seconds
             })
         }, 1000);
         return () => clearInterval(interval);
-      }, []);
+    }, []);
 
     return (
         <div className="App" >
@@ -116,23 +141,32 @@ function App() {
                 <h3>Login for imageupload</h3>
             }
             {user ?
-                //console.log("posts " + posts.id)
-                <h2> </h2>
-                :
-                <h3>login to post</h3>
-            }
-            {user ?
                 <Button onClick={() => {
                     getCollection();
                     console.log(posts)
-                }}>Collection Test</Button>
+                }}>Get Collection</Button>
                 :
                 <h3>  </h3>}
             <h1>Time remaining:  Days,{time.day}, Hours:{time.hour} minutes:{time.minute} seconds:{time.seconds}</h1>
 
-            {/* {here the table begins =====================================================================================================} */}
-            {posts ?
+            <Button onClick={() => {
+                const deadline = new Date(2021, 0, 26);
+                const week = 1000 * 60 * 60 * 24 * 7;
+                var i;
+                for (i = 0; i < 5; i++) {
+                    db.collection("Challenge").add({ deadline: deadline.getTime() + i * week })
+                }
 
+
+                console.log(countDown(deadline.getTime()))
+            }}>Time Update</Button>
+
+            <Button onClick={() => {
+                console.log(deadline)
+            }}>deadline log</Button>
+
+            {/* {here the table begins ==========================================} */}
+            {posts ?
                 posts.map(({ id, imageUrl, points }) => (
                     <div>
                         <Post key={id} imageUrl={`${imageUrl}`} points={points} id={id} />
@@ -141,15 +175,7 @@ function App() {
                 :
                 <h3>no posts loaded</h3>
             }
-            {/* {here the tabe ends =====================================================================================================} */}
-            {/* {posts[0] ?
-                (console.log(`Posts => UserID : ${posts[0].userID}  points: ${posts[0].points}`)
-
-                )
-                :
-                <h3>no posts loaded</h3> 
-            } */}
-
+            {/* {here the tabe ends ==============================================} */}
 
         </div>
 

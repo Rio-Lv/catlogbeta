@@ -1,0 +1,14 @@
+.left {
+    background: url(bg-1.jpg);
+    width: 50%;
+    position: absolute;
+    left: 0px;
+    height: 100%;
+}
+
+.right {
+    width: 50%;
+    position: absolute;
+    right: 0px;
+    height: 100%;
+}

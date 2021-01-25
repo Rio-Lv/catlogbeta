@@ -28,7 +28,8 @@ top 10 is stored into the public gallery
 -
 -create weekly auto reset
 {
-    create a firebase project that has a count down
+    [[[[created a countDown]]]]
+    
 }
 
 -fix ui login
