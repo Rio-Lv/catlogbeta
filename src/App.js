@@ -10,16 +10,19 @@ import "firebase/firestore";
 
 import ImageUpload from './components/ImageUpload';
 import Post from './components/Post';
-
-import countDown from './functions/time';
+import CountDown from './components/CountDown';
 
 var provider = new firebase.auth.GoogleAuthProvider();
+const week = 1000 * 60 * 60 * 24 * 7;
+const schedule = db.collection("schedule").doc("1swrNVoYEanKzT9tUVPq");
+
+
 
 function App() {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-    const counter = 0;
-    const [time, setTime] = useState({ day: 0, hour: 0, minute: 0, seconds: 0 })
+
+    const [now, setNow] = useState(Date.now())
     const [deadline, setDeadline] = useState(0);
     const login = () => {
         firebase.auth()
@@ -27,15 +30,13 @@ function App() {
             .then((result) => {
                 // ...
             }).catch((error) => {
-                console.log(error)
-
+                console.log(error);
             });
     }
     const logout = () => {
         firebaseApp.auth().signOut().then(() => {
             console.log('loggin out');
             setUser(null)
-
         })
     }
     firebaseApp.auth().onAuthStateChanged(response => {
@@ -46,6 +47,7 @@ function App() {
             (console.log('auth function no response'))
         }
     })
+    // getting collection, this should be put into a use effect
     const getCollection = () => {
         if (user) {
             console.log('getting collection');
@@ -66,49 +68,27 @@ function App() {
                         setPosts(Posts);
                         console.log("posts are set");
                     }
-
-
-
                 });
             console.log('collection received');
         }
     }
-
-
+    // setting deadline to correct doc from firebase
     useEffect(() => {
-        const week = 1000*60*60*24*7;
-        db.collection("Challenge").where("deadline", "!=", 0)
-            .get()
-            .then(function (querySnapshot) {
-                
-                querySnapshot.forEach(function (doc) {    
-                    // doc.data() is never undefined for query doc snapshots
-                    
-                    if(doc.data().deadline>Date.now() && doc.data().deadline<Date.now()+week){
-                        console.log('eyy')
-                        setDeadline(doc.data().deadline)
-                    }
-
-                });
+        schedule.get().then(doc => {
+            console.log(doc.data().schedule);
+            doc.data().schedule.forEach((item) => {
+                if(item.deadline>=Date.now() && item.deadline<Date.now()+week)
+                console.log(typeof(item.deadline));
+                setDeadline(item.deadline);
             })
-            .catch(function (error) {
-                console.log("Error getting documents: ", error);
-            });
-
+        })
     }, [])
 
-
+    // loop for updating the timer that is displayed , countdown function takes a end date and creates a countdown
     useEffect(() => {
-        const interval = setInterval(() => {
-
-            setTime({
-                day: countDown(counter).day,
-                hour: countDown(counter).hour,
-                minute: countDown(counter).minute,
-                seconds: countDown(counter).seconds
-            })
+        setInterval(() => {
+            setNow(Date.now())
         }, 1000);
-        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -140,6 +120,7 @@ function App() {
                 :
                 <h3>Login for imageupload</h3>
             }
+            {/* gets posts from database, this should be done with useeffect */}
             {user ?
                 <Button onClick={() => {
                     getCollection();
@@ -147,24 +128,20 @@ function App() {
                 }}>Get Collection</Button>
                 :
                 <h3>  </h3>}
-            <h1>Time remaining:  Days,{time.day}, Hours:{time.hour} minutes:{time.minute} seconds:{time.seconds}</h1>
+           
 
+            {/* This button creates the days of challenges on the data base, too be removed for production */}
             <Button onClick={() => {
-                const deadline = new Date(2021, 0, 26);
-                const week = 1000 * 60 * 60 * 24 * 7;
+                const startdate = new Date(2021, 0, 26); 
+                const schedule = [];
                 var i;
-                for (i = 0; i < 5; i++) {
-                    db.collection("Challenge").add({ deadline: deadline.getTime() + i * week })
-                }
+                for (i = 0; i < 10; i++) {
+                    schedule.push({ deadline: startdate.getTime() + i * week })
+                };
+                db.collection("schedule").add({schedule});
+            }}>create schedule</Button>
 
-
-                console.log(countDown(deadline.getTime()))
-            }}>Time Update</Button>
-
-            <Button onClick={() => {
-                console.log(deadline)
-            }}>deadline log</Button>
-
+            <CountDown  deadline={deadline} now={now}/>
             {/* {here the table begins ==========================================} */}
             {posts ?
                 posts.map(({ id, imageUrl, points }) => (
