@@ -19,27 +19,33 @@ var facebookProvider = new firebase.auth.FacebookAuthProvider();
 
 var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
 
-ui.start('#firebaseui-auth-container', {
-  autoUpgradeAnonymousUsers: true,
-  signInSuccessUrl: '<url-to-redirect-to-on-success>',
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-  ],
-  callbacks: {
-    signInFailure: function (error) {
-      console.log(error);
-      if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
-        return Promise.resolve();
-      }
-      var cred = error.credential;
-      return firebase.auth().signInWithCredential(cred);
-    }
-  }
-});
+
 
 function App() {
   const [user, setUser] = useState(null);
+
+  useEffect(()=>{
+    if(user===null){
+      ui.start('#firebaseui-auth-container', {
+        autoUpgradeAnonymousUsers: true,
+        signInSuccessUrl: '<url-to-redirect-to-on-success>',
+        signInOptions: [
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        ],
+        callbacks: {
+          signInFailure: function (error) {
+            console.log(error);
+            if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+              return Promise.resolve();
+            }
+            var cred = error.credential;
+            return firebase.auth().signInWithCredential(cred);
+          }
+        }
+      });
+    }
+  },[user])
 
   var printUID = firebase.functions().httpsCallable('uid');
   const googleLogin = () => {
@@ -108,7 +114,7 @@ function App() {
         })
       }}>UID</button>
       {user ?
-        <h2> </h2>
+        <h2>logged in</h2>
         :
         <div id="firebaseui-auth-container"></div>
       }
