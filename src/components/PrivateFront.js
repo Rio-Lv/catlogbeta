@@ -7,6 +7,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import styled from 'styled-components';
+
 import './styles/publicFront.css';
 
 import { auth } from '../firebase';
@@ -14,7 +16,6 @@ import { auth } from '../firebase';
 import Drop from './Drop'
 
 const margin = 30;
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         transition: '0.6s',
         '&:hover': {
             backgroundColor: 'black',
-            color: 'gold'
+            color: 'orange'
         }
     },
     logoutButton: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         transition: '0.6s',
         '&:hover': {
             backgroundColor: 'black',
-            color: 'gold'
+            color: 'orange'
         }
     },
     menu: {
@@ -56,40 +57,48 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Width = window.innerWidth;
+const Back = styled.div`
+    position:fixed;
+    transform:translate(-50%,-50%) ;
+    left:50%;
+    top:50%;
+    height:100%;    
+    width:100%;
+    margin: auto;
+    padding: 10px;
+    border-radius:3px;
+    border:1px solid #dbdbdb;
+    background-size: cover;
+    `
 
 export default function PrivateFront(props) {
     const classes = useStyles();
-    const [width, setWidth] = useState(Width);
-
     const [anchorEl, setAnchorEl] = useState(null);
-
-    const updateWidth = () => {
-        setWidth(window.innerWidth);
-    }
-    window.onresize = updateWidth;
-
+    const [openDrop, setOpenDrop] = useState(false);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
-
     const logout = () => {
         auth.signOut().then(() => {
             console.log('logging out');
         })
     }
-
     return (
-
         <div className={classes.root}>
+            {openDrop ?
+                <div>
+                    <Back onClick={() => setOpenDrop(false)}></Back>
+                    <Drop />
+                    <h1>Submission Preview</h1>
+                </div>
+                :
+                null
+            }
             <div className={classes.bar}>
-                
                 <Button />
-
                 <IconButton
                     className={classes.iconButton}
                     aria-controls="simple-menu"
@@ -106,26 +115,28 @@ export default function PrivateFront(props) {
                     onClose={handleClose}
                 >
                     <MenuItem
-                    
                         onClick={() => {
                             handleClose();
                         }}>Public Gallery</MenuItem>
-                    <MenuItem onClick={handleClose}>Private Gallery</MenuItem>
-                    <MenuItem onClick={handleClose}>Hello</MenuItem>
+                    <MenuItem
+                        onClick={()=>{
+                            handleClose();
+                        }}
+                    >Private Gallery</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setOpenDrop(true)
+                        }
+                        }>Submit</MenuItem>
                 </Menu>
-                
-
                 <Button
                     className={classes.logoutButton}
                     color='inherit'
-                    style={{ left: `${width}px` }}
+                    style={{ left: `100%` }}
                     onClick={logout}
                 >Logout</Button>
-
             </div>
-            <Drop/>
-
-
         </div>
     );
 }

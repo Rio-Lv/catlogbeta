@@ -41,7 +41,7 @@ function App() {
     <div className="App">
 
       <header className="App-header">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+        {/* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" /> */}
       </header>
 
       <img className="image" src="https://www.teahub.io/photos/full/281-2819479_wallpaper-skull-space-suit-art-astronaut-surreal-skeleton.jpg" alt="" />

@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import convert from 'image-file-resize';
 
+
 const StyledDiv = styled.div`
     position:fixed;
     transform:translate(-50%,-50%) ;
@@ -15,6 +16,8 @@ const StyledDiv = styled.div`
     border-radius:3px;
     border:1px solid #dbdbdb;
     background-size: cover;
+    background-color: white;
+    text-align: center;   
 `
 function Drop() {
     const [image, setImage] = useState(null);
@@ -27,7 +30,6 @@ function Drop() {
         } else {
             console.log('no image has been loaded yet');
         }
-
     }, [image])
     const onDrop = useCallback(files => {
         var _URL = window.URL || window.webkitURL;
@@ -42,11 +44,11 @@ function Drop() {
             }).then(resp => {
                 setImage(resp)
                 var image = new Image();
-                
+
                 image.src = _URL.createObjectURL(resp);
-                
+
                 setLocUrl(`${image.src}`)
-                
+
                 image.onload = function () {
                     console.log(this.width + " " + this.height + " this was created in the image converter");
                     //alert(props.week)
@@ -62,13 +64,46 @@ function Drop() {
     return (
         <div>
             <StyledDiv
-                style={{backgroundImage:image? `url(${locURL})`:'none'}}
-                {...getRootProps({ refKey: 'innerRef' })}>
-                <input {...getInputProps()} />
-                {image?
-                null:<h2>no image detected just yet</h2>}
+                style={{
+                    backgroundImage: image ? `url(${locURL})` : 'none'
+                }}
+                {...getRootProps({ refKey: 'innerRef' })}
+            >
+                <input
+                    {...getInputProps()}
+                />
+                {image ?
+                    null :
+                    <div style={{
+                        alignSelf: 'center',
+                        fontWeight: '200',
+                        transform: 'translate(50px,145px)',
+                        color: '#d3d3d3',
+                        width: '300px',
+                        fontSize: '25px'
+                    }}>
+                        <p1>Click to open file explorer</p1>
+                        <br />
+                        <p1>or</p1>
+                        <br />
+                        <p1>Drag and drop an image</p1>
+                        
+
+                    </div>}
+                <div style={{
+                    alignSelf: 'center',
+                    fontWeight: '200',
+                    transform: 'translate(50px,315px)',
+                    color: '#d3d3d3',
+                    width: '300px',
+                    fontSize: '25px'
+                }}>
+                    
+
+                </div>
             </StyledDiv>
-        </div>  
+
+        </div>
     )
 }
 export default Drop

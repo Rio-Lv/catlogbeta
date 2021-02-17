@@ -7,13 +7,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-
 import Login from './Login';
-
 import './styles/publicFront.css'
-
-import styled, { keyframes } from 'styled-components';
-
+import styled from 'styled-components';
 
 const margin = 30;
 
