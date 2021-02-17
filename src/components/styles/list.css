@@ -1,10 +1,12 @@
 .login-box {
+    opacity: 1;
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-175px, -50%);
+    transform: translate(-190px, -50%);
     display: inline-block;
     text-align: center;
+    transition: opacity 0.6s ease-in;
 }
 
 .login-list {

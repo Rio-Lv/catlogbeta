@@ -11,6 +11,8 @@ import './styles/publicFront.css';
 
 import { auth } from '../firebase';
 
+import Drop from './Drop'
+
 const margin = 30;
 
 
@@ -85,7 +87,7 @@ export default function PrivateFront(props) {
 
         <div className={classes.root}>
             <div className={classes.bar}>
-                <img className="image" src="https://www.brightful.me/content/images/2020/07/david-kovalenko-G85VuTpw6jg-unsplash.jpg" alt="" />
+                
                 <Button />
 
                 <IconButton
@@ -111,6 +113,7 @@ export default function PrivateFront(props) {
                     <MenuItem onClick={handleClose}>Private Gallery</MenuItem>
                     <MenuItem onClick={handleClose}>Hello</MenuItem>
                 </Menu>
+                
 
                 <Button
                     className={classes.logoutButton}
@@ -120,6 +123,7 @@ export default function PrivateFront(props) {
                 >Logout</Button>
 
             </div>
+            <Drop/>
 
 
         </div>

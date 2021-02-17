@@ -8,14 +8,15 @@ import PrivateFront from './components/PrivateFront';
 import Login from './components/Login';
 
 
+
+
 function App() {
   const [publicFront, setPublicFront] = useState(true);
   const [privateFront, setPrivateFront] = useState(false);
-
   // const [publicGallery, setPublicGallery] = useState(false);
-
   const [user, setUser] = useState(null);
   const [loginUI, setLoginUI] = useState(false);
+  const [page,setPage] = useState('');
 
   useEffect(() => {
     // check auth state changed
@@ -31,8 +32,10 @@ function App() {
       }
     })
   }, [user])
-  function publicfrontOpen() { setPublicFront(true) };
-  function publicfrontClose() { setPublicFront(false) };
+
+  useEffect(()=>{
+
+  },[page])
 
   return (
     <div className="App">
@@ -40,23 +43,13 @@ function App() {
       <header className="App-header">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
       </header>
-      
+
+      <img className="image" src="https://www.teahub.io/photos/full/281-2819479_wallpaper-skull-space-suit-art-astronaut-surreal-skeleton.jpg" alt="" />
       {user ?
-      <PrivateFront />
-      :
-      <PublicFront publicfrontClose={publicfrontClose} user={user}/>
-    }
-
-
-      
-      <button
-        onClick={publicfrontClose}
-        style={{ left: '100px', top: '100px' }}
-      >Close</button>
-      <button
-        onClick={publicfrontOpen}
-        style={{ left: '50px', top: '100px' }}
-      >Open</button>
+        <PrivateFront />
+        :
+        <PublicFront user={user}/>
+      }
 
     </div>
   );

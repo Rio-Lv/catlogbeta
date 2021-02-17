@@ -6,21 +6,17 @@ import './styles/facebook.css';
 import './styles/list.css';
 
 function Login(props) {
-    const [user, setUser] = useState(null)
+
     const googleSignIn = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-        if (user === null) {
             auth.signInWithPopup(provider).then((result) => {
             }).catch((error) => {
                 console.log(error)
-            });
-        } else {
-            console.log(user)
-        }
+            });  
     }
     const facebookSignIn = () => {
         const provider = new firebase.auth.FacebookAuthProvider();
-        if (user === null) {
+        
             auth.signInWithPopup(provider).then((result) => {
             }).catch((error) => {
                 var pendingCred = error.credential;
@@ -28,18 +24,7 @@ function Login(props) {
                     return result.user.linkWithCredential(pendingCred)
                 }).then(() => console.log('credentials have been linked'))
             });
-        } else {
-            console.log(user)
-        }
     }
-
-    useEffect(() => {
-        if (props.user !== null) {
-            setUser(props.user)
-        } else {
-            setUser(null)
-        }
-    }, [props.user])
     return (
         <div className="login-box">
                 <div>

@@ -7,12 +7,29 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+
 import Login from './Login';
 
 import './styles/publicFront.css'
 
+import styled, { keyframes } from 'styled-components';
+
+
 const margin = 30;
 
+const Back = styled.div`
+    position:fixed;
+    transform:translate(-50%,-50%) ;
+    left:50%;
+    top:50%;
+    height:100%;    
+    width:100%;
+    margin: auto;
+    padding: 10px;
+    border-radius:3px;
+    border:1px solid #dbdbdb;
+    background-size: cover;
+    `
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,27 +66,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Width = window.innerWidth;
-
-
-
 export default function PublicFront(props) {
     const classes = useStyles();
-    const [width, setWidth] = useState(Width);
 
     const [anchorEl, setAnchorEl] = useState(null);
 
     const [loginUI, setLoginUI] = useState(false);
 
-    const updateWidth = () => {
-        setWidth(window.innerWidth);
-    }
-    window.onresize = updateWidth;
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -84,11 +91,7 @@ export default function PublicFront(props) {
 
         <div className={classes.root}>
             <div className={classes.bar}>
-                <img 
-                className="image" 
-                src="https://www.brightful.me/content/images/2020/07/david-kovalenko-G85VuTpw6jg-unsplash.jpg" 
-                alt=""
-                onClick= {closeLoginUI} />
+
                 <Button />
 
                 <IconButton
@@ -116,11 +119,17 @@ export default function PublicFront(props) {
                 <Button
                     className={classes.loginButton}
                     color='inherit'
-                    style={{ left: `${width}px` }}
+                    style={{ left: `100%` }}
                     onClick={openLoginUI}
                 >Login</Button>
                 {loginUI ?
-                    <Login user={props.user} />:null
+                    <Back
+                        onClick={closeLoginUI}
+                    >
+                        <Login />
+                    </Back>
+                    :
+                    null
                 }
 
 
