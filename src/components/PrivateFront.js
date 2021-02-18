@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     logoutButton: {
         position: 'fixed',
         // left:width,
-        transform: 'translate(-140%, -50%)',
+        transform: 'translate(-120%, -50%)',
         marginRight: `${margin}px`,
         marginTop: `${margin}px`,
         backgroundColor: 'transparent',
@@ -91,8 +91,7 @@ export default function PrivateFront(props) {
             {openDrop ?
                 <div>
                     <Back onClick={() => setOpenDrop(false)}></Back>
-                    <Drop />
-                    <h1>Submission Preview</h1>
+                    <Drop/>    
                 </div>
                 :
                 null
@@ -129,12 +128,18 @@ export default function PrivateFront(props) {
                             setOpenDrop(true)
                         }
                         }>Submit</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setOpenDrop(true)
+                        }
+                        }>rules</MenuItem>
                 </Menu>
                 <Button
                     className={classes.logoutButton}
                     color='inherit'
-                    style={{ left: `100%` }}
-                    onClick={logout}
+                    style={{ left: `100%` ,fontWeight:'600'}}
+                    onClick={logout}                
                 >Logout</Button>
             </div>
         </div>

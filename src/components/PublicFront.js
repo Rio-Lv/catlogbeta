@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     loginButton: {
         position: 'fixed',
         // left:width,
-        transform: 'translate(-140%, -50%)',
+        transform: 'translate(-120%, -50%)',
         marginRight: `${margin}px`,
         marginTop: `${margin}px`,
         backgroundColor: 'transparent',
@@ -64,11 +64,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PublicFront(props) {
     const classes = useStyles();
-
     const [anchorEl, setAnchorEl] = useState(null);
-
     const [loginUI, setLoginUI] = useState(false);
-
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -78,18 +75,28 @@ export default function PublicFront(props) {
     };
 
     function openLoginUI() {
-        setLoginUI(true)
+        setLoginUI(true);
+        console.log('open');
+        console.log(loginUI);
     }
     function closeLoginUI() {
-        setLoginUI(false)
+        setLoginUI(false);
+        console.log(loginUI);
+        console.log('back close');
     }
     return (
 
         <div className={classes.root}>
             <div className={classes.bar}>
-
-                <Button />
-
+                {loginUI ?
+                    <div>
+                        <Back onClick={closeLoginUI}>
+                            <Login/>
+                        </Back>
+                    </div>
+                    :
+                    null
+                }
                 <IconButton
                     className={classes.iconButton}
                     aria-controls="simple-menu"
@@ -111,25 +118,17 @@ export default function PublicFront(props) {
                     <MenuItem onClick={handleClose}>Rules</MenuItem>
                     <MenuItem onClick={handleClose}>about</MenuItem>
                 </Menu>
-
                 <Button
                     className={classes.loginButton}
                     color='inherit'
-                    style={{ left: `100%` }}
+                    style={{ left: `100%`, fontWeight: '600' }}
                     onClick={openLoginUI}
                 >Login</Button>
-                {loginUI ?
-                    <Back
-                        onClick={closeLoginUI}
-                    >
-                        <Login />
-                    </Back>
-                    :
-                    null
-                }
+
 
 
             </div>
+
 
 
         </div>

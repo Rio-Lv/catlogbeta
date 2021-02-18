@@ -39,10 +39,9 @@ function App() {
 
   return (
     <div className="App">
+      <head>
 
-      <header className="App-header">
-        {/* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" /> */}
-      </header>
+      </head>
 
       <img className="image" src="https://www.teahub.io/photos/full/281-2819479_wallpaper-skull-space-suit-art-astronaut-surreal-skeleton.jpg" alt="" />
       {user ?
