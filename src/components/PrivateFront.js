@@ -13,7 +13,16 @@ import './styles/publicFront.css';
 
 import { auth } from '../firebase';
 
-import Drop from './Drop'
+import Drop from './subcomponents/Drop';
+import Rules from './subcomponents/Rules';
+import About from './subcomponents/About';
+
+import PublicGallery from './PublicGallery';
+import PrivateGallery from './PrivateGallery';
+import Voting from './Voting';
+
+import { BGblur, BGrmblur } from '../customTools/filters';
+
 
 const margin = 30;
 
@@ -40,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
     logoutButton: {
         position: 'fixed',
-        // left:width,
+
         transform: 'translate(-120%, -50%)',
         marginRight: `${margin}px`,
         marginTop: `${margin}px`,
@@ -51,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: 'black',
             color: 'orange'
         }
+
     },
     menu: {
         backgroundColor: 'transparent',
@@ -75,6 +85,12 @@ export default function PrivateFront(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [openDrop, setOpenDrop] = useState(false);
+
+    const [openRules, setOpenRules] = useState(false);
+    const [openAbout, setOpenAbout] = useState(false);
+    const [openVoting, setOpenVoting] = useState(false);
+    const [publicGallery, setPublicGallery] = useState(false);
+    const [privateGallery,setPrivateGallery] = useState(false);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -88,10 +104,63 @@ export default function PrivateFront(props) {
     }
     return (
         <div className={classes.root}>
+
+            {publicGallery ?
+                <PublicGallery setPublicGallery={setPublicGallery} />
+                :
+                null
+            }
+            {privateGallery ?
+                <PrivateGallery setPrivateGallery={setPrivateGallery} />
+                :
+                null
+            }
+            {openRules ?
+                <div>
+                    <Back onClick={() => {
+                        setOpenRules(false)
+                        BGrmblur()
+                    }}>
+                        <Rules /> 
+                    </Back>
+                </div>
+                :
+                null
+            }
+            {openAbout ?
+                <div>
+                    <Back onClick={() => {
+                        setOpenAbout(false)
+                        BGrmblur()
+                    }}>
+                    </Back>
+                    <About />
+                </div>
+                :
+                null
+            }
+            {openVoting ?
+                <div>
+                    <Back onClick={() => {
+                        setOpenVoting(false)
+                        BGrmblur()
+                    }}>
+                    </Back>
+                    <Voting/>
+                </div>
+                :
+                null
+            }
             {openDrop ?
                 <div>
-                    <Back onClick={() => setOpenDrop(false)}></Back>
-                    <Drop/>    
+                    <Back onClick={() => {
+                        setOpenDrop(false)
+                        BGrmblur()
+                    }}>
+                    </Back>
+                    <Drop close={() => {
+                        setOpenDrop(false);
+                    }} />
                 </div>
                 :
                 null
@@ -116,30 +185,55 @@ export default function PrivateFront(props) {
                     <MenuItem
                         onClick={() => {
                             handleClose();
+                            setPublicGallery(true);
+                            BGblur();
+                            console.log('opening public gallery');
                         }}>Public Gallery</MenuItem>
-                    <MenuItem
-                        onClick={()=>{
-                            handleClose();
-                        }}
-                    >Private Gallery</MenuItem>
+
                     <MenuItem
                         onClick={() => {
                             handleClose();
-                            setOpenDrop(true)
+                            setOpenDrop(true);
+                            BGblur();
                         }
                         }>Submit</MenuItem>
                     <MenuItem
                         onClick={() => {
                             handleClose();
-                            setOpenDrop(true)
+                            setOpenRules(true);
+                            BGblur();
                         }
                         }>rules</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setOpenAbout(true);
+                            BGblur();
+                        }
+                        }>About</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setOpenVoting(true);
+                            BGblur();
+                        }
+                        }>Voting</MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setPrivateGallery(true);
+                            BGblur();
+                        }}
+                    >Submissions</MenuItem>
+
                 </Menu>
+
                 <Button
                     className={classes.logoutButton}
                     color='inherit'
-                    style={{ left: `100%` ,fontWeight:'600'}}
-                    onClick={logout}                
+                    style={{ left: `100%`, fontWeight: '600' }}
+                    onClick={logout}
                 >Logout</Button>
             </div>
         </div>

@@ -1,0 +1,34 @@
+body {
+    background-color: rgb(15, 15, 15);
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+img.image {
+    overflow: scroll;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    transition: 2s;
+    border-radius: 5px;
+}
+
+@media(max-aspect-ratio:1/1) {
+    img.image {
+        position: absolute;
+        width: auto;
+        height: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        border-radius: 5px;
+    }
+}

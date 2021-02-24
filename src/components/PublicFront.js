@@ -7,9 +7,12 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import Login from './Login';
+import Login from './subcomponents/Login';
+import PublicGallery from './PublicGallery'
 import './styles/publicFront.css'
 import styled from 'styled-components';
+import { BGblur, BGrmblur, blur, rmblur } from '../customTools/filters';
+import About from './subcomponents/About';
 
 const margin = 30;
 
@@ -43,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'transparent',
         color: 'white',
         transition: '0.6s',
+
+
         '&:hover': {
             backgroundColor: 'black'
         }
@@ -66,6 +71,8 @@ export default function PublicFront(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [loginUI, setLoginUI] = useState(false);
+    const [publicGallery, setPublicGallery] = useState(false);
+    const [openAbout, setOpenAbout] = useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -88,10 +95,31 @@ export default function PublicFront(props) {
 
         <div className={classes.root}>
             <div className={classes.bar}>
+                {openAbout ?
+                    <div>
+                        <Back onClick={() => {
+                            setOpenAbout(false)
+                            BGrmblur()
+                        }}>
+                        </Back>
+                        <About />
+                    </div>
+                    :
+                    null
+                }
+                {publicGallery ?
+                    <PublicGallery setPublicGallery={setPublicGallery} />
+                    :
+                    null
+                }
                 {loginUI ?
                     <div>
-                        <Back onClick={closeLoginUI}>
-                            <Login/>
+                        <Back onClick={() => {
+                            closeLoginUI();
+                            BGrmblur();
+
+                        }}>
+                            <Login />
                         </Back>
                     </div>
                     :
@@ -112,17 +140,30 @@ export default function PublicFront(props) {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={() => {
-                        handleClose();
-                    }}>Public Gallery</MenuItem>
-                    <MenuItem onClick={handleClose}>Rules</MenuItem>
-                    <MenuItem onClick={handleClose}>about</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setPublicGallery(true);
+                            BGblur();
+                            console.log('opening public gallery');
+                        }}>Public Gallery</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            setOpenAbout(true);
+                            BGblur();
+                        }
+                        }>About</MenuItem>
                 </Menu>
                 <Button
                     className={classes.loginButton}
                     color='inherit'
                     style={{ left: `100%`, fontWeight: '600' }}
-                    onClick={openLoginUI}
+                    onClick={() => {
+                        openLoginUI();
+                        BGblur();
+                    }
+                    }
                 >Login</Button>
 
 
