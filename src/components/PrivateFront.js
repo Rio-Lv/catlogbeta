@@ -166,7 +166,7 @@ export default function PrivateFront(props) {
                 null
             }
             <div className={classes.bar}>
-                <Button />
+                
                 <IconButton
                     className={classes.iconButton}
                     aria-controls="simple-menu"
@@ -225,7 +225,7 @@ export default function PrivateFront(props) {
                             setPrivateGallery(true);
                             BGblur();
                         }}
-                    >Submissions</MenuItem>
+                    >   Submissions</MenuItem>
 
                 </Menu>
 

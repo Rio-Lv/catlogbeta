@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import firebase from 'firebase';
+import { v4 as uuidv4 } from 'uuid';
+
 
 // using for resizing to 1:1 ratio
 import convert from 'image-file-resize';
 
 import { dropZone } from '../../customTools/boxing';
-import { BGrmblur,BGblur} from '../../customTools/filters';
+import { BGrmblur, BGblur } from '../../customTools/filters';
 
 import { db, storage, auth } from '../../firebase.js'
 
@@ -14,7 +16,7 @@ import FadeIn from 'react-fade-in'
 
 const { Box, Zone, Tab, DarkTab, ZoneDiv, ZoneDiv2, Butt } = dropZone(400, 30);
 
-const week = 4;
+const week = 5;
 const { t1, t2, t3 } = { t1: 'Blocky', t2: 'Chonky', t3: 'Cat' };
 
 
@@ -69,57 +71,70 @@ function Drop(props) {
     }, [])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
     const handleUpload = () => {
-        const storage_path = `/${user.uid}/${week}`;
-        if (image != null) {
+        const storage_path = `/${user.uid}/week${week}`;
+        if (image !== null) {
             console.log(user.uid);
 
-            // storage.ref(storage_path).delete().then(() => {
-            //     // File deleted successfully
-            //     console.log('successfully deleted, ready for replacement')
-            // }).catch((error) => {
-            //     // Uh-oh, an error occurred!
-            //     console.log(error)
-            // });
-            // storage.ref(storage_path).put(image);
+            storage.ref(storage_path).delete().then(() => {
+                // File deleted successfully
+                console.log('successfully deleted, ready for replacement')
+            }).catch((error) => {
+                // Uh-oh, an error occurred!
+                console.log(error)
+            });
 
-            console.log('image sent to storage');
-            storage
-                .ref(storage_path)
-                .getDownloadURL()
-                .then(url => {
-                    const title = 'Chonky Blocky Cat'
-                    const submission = {
-                        title:title,
-                        url:url,
-                        user:user.uid
-                    } 
-                    const submissions= [];
+            storage.ref(storage_path).put(image).then(() => {
+                console.log('image sent to storage');
 
-                    const docRef = db.collection('users').doc(`${user.uid}`)
+                storage
+                    .ref(storage_path)
+                    .getDownloadURL()
+                    .then(url => {
+                        console.log(url)
 
-                    docRef.get().then((doc)=>{
-                        console.log(doc.data());
-                        submissions.push(submission);
-                    })
 
-                    console.log(url);
-                    docRef.set({
-                        week:`week${week}`,
-                        uid: user.uid,
-                        submissions:submissions,
+                        const docRef = db.collection('users').doc(`${user.uid}`);
+                        docRef.get().then(doc => {
+                            console.log(doc.data());
+                            const submission = {
+                                week: week,
+                                title: title,
+                                url: url,
+                                user: user.uid
+                            }
+                            try {
+                                const submissions = doc.data().submissions
+                                const newSubmissions = [...submissions, submission]
+                                console.log('submissions have been set');
+                                console.log(newSubmissions);
+                                docRef.set({
+                                    week: `week${week}`,
+                                    uid: user.uid,
+                                    submissions: newSubmissions,
+                                });
+                            } catch {
+                                console.log('fuck, no submission detected')
+                            }
+                            // this ia an array
+                        })
+                        console.log('image has been sent')
+                        setImage(null);
+                    }).catch((error) => {
+                        // Uh-oh, an error occurred!
+                        console.log(error)
                     });
+            }).catch(err => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log('succeesss')
+                }
 
-                    console.log('image has been sent')
-                    setImage(null);
-                }).catch((error) => {
-                    // Uh-oh, an error occurred!
-                    console.log(error)
-                });
+            });
         } else {
             alert('no image loaded')
         }
     }
-
 
     return (
         <div>

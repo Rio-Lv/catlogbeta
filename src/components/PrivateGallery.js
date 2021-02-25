@@ -9,51 +9,58 @@ import FadeIn from 'react-fade-in';
 
 import firebase from 'firebase';
 
-
-const photos = [
-    {
-        src: 'https://i.redd.it/rlwj545720j61.png',
-        width: 1,
-        height: 1
-    },
-    {
-        src: 'https://wallpaperaccess.com/full/2185929.jpg',
-        width: 1,
-        height: 1
-    },
-
-    {
-        src: 'https://i.redd.it/zyozbv445ui61.png',
-        width: 1,
-        height: 1
-    }
-]
-
-
 const { MainBox, InnerBox } = gallery(300, 400);
 
 function PrivateGallery(props) {
     const [user, setUser] = useState(null)
     const [submissions, setSubmissions] = useState([])
+    const [photos, setPhotos] = useState([])
+
     useEffect(() => {
         firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
+            if (user !== null) {
                 // User is signed in.
-                setUser(user)
+                console.log(user.uid)
+                setUser(user);
+                console.log(user.uid)
+                const docRef = db.collection('users').doc(`${user.uid}`)
+
+                docRef.onSnapshot(doc => {
+                    setSubmissions(doc.data());
+                    console.log('this coming from private gallery');
+
+                    const subArray = doc.data().submissions;
+                    subArray.forEach(element => {
+                        console.log('array element ===>')
+                        console.log(element);
+                    });
+                    console.log(doc.data().submissions[0].url);
+
+
+
+                    docRef.get().then(doc => {
+                        const photo = {
+                            src: `${doc.data().submissions[0].url}`,
+                            width: 1,
+                            height: 1,
+                        }
+                        setPhotos([...photos, photo]);
+                        console.log('photos')
+                        console.log(photos);
+                    })
+
+                })
             } else {
                 // No user is signed in.
             }
         });
-    }, [user])
+    }, [])
 
-    const sublog = () =>{
-        const docRef = db.collection('users').doc(`${user.uid}`)
-            docRef.get().then(doc => {
-                setSubmissions(doc.data());
-                console.log(doc.data().submissions[0].url);
+    const sublog = (User) => {
 
-            })
     }
+
+
     return (
         <div>
             <MainBox onClick={() => {
@@ -63,7 +70,7 @@ function PrivateGallery(props) {
             }}>
                 <InnerBox>
                     <FadeIn>
-                        <Gallery photos={photos} onClick={sublog} />
+                        <Gallery photos={photos} />
                     </FadeIn>
                 </InnerBox>
             </MainBox>
