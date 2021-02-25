@@ -10,13 +10,13 @@ import convert from 'image-file-resize';
 import { dropZone } from '../../customTools/boxing';
 import { BGrmblur, BGblur } from '../../customTools/filters';
 
-import { db, storage, auth } from '../../firebase.js'
+import { db, storage } from '../../firebase.js'
 
 import FadeIn from 'react-fade-in'
 
 const { Box, Zone, Tab, DarkTab, ZoneDiv, ZoneDiv2, Butt } = dropZone(400, 30);
 
-const week = 5;
+const week = 3;
 const { t1, t2, t3 } = { t1: 'Blocky', t2: 'Chonky', t3: 'Cat' };
 
 
@@ -90,34 +90,41 @@ function Drop(props) {
                     .ref(storage_path)
                     .getDownloadURL()
                     .then(url => {
-                        console.log(url)
-
-
+                        console.log(url);
                         const docRef = db.collection('users').doc(`${user.uid}`);
+                        const submission = {
+                            week: week,
+                            title: title,
+                            url: url,
+                            user: user.uid
+                        }
                         docRef.get().then(doc => {
-                            console.log(doc.data());
-                            const submission = {
-                                week: week,
-                                title: title,
-                                url: url,
-                                user: user.uid
-                            }
-                            try {
-                                const submissions = doc.data().submissions
+                            if (doc.exists) {
+                                console.log(doc.data());
+                                const submissions = doc.data().submissions;
+
+                                submissions.forEach(item=>{
+                                    if(item.week===week){
+                                        submissions.pop();
+                                    }
+                                })
+
                                 const newSubmissions = [...submissions, submission]
                                 console.log('submissions have been set');
                                 console.log(newSubmissions);
                                 docRef.set({
-                                    week: `week${week}`,
                                     uid: user.uid,
                                     submissions: newSubmissions,
                                 });
-                            } catch {
-                                console.log('fuck, no submission detected')
+                                console.log('image url has been sent this weeks submission');
+                            } else {
+                                docRef.set({
+                                    uid: user.uid,
+                                    submissions: [submission],
+                                });
                             }
-                            // this ia an array
                         })
-                        console.log('image has been sent')
+
                         setImage(null);
                     }).catch((error) => {
                         // Uh-oh, an error occurred!
